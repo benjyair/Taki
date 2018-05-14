@@ -5,16 +5,22 @@ import requests
 import random
 import time
 import codecs
-import re
+import shutil
 import sys
 
 reload(sys)
-sys.setdefaultencoding("utf8")
+sys.setdefaultencoding('utf8')
+
+base_user_url = 'http://chanyouji.com/api/users/%s.json?page=%s'
+base_trip_url = 'http://chanyouji.com/api/trips/%s.json'
+
+base_user_path = '../data/user_%s'
+base_trip_path = '../data/user_%s/trip_%s'
 
 
 def sleep(leave=20):
     date = random.random() * leave
-    print "Sleep %ss" % date
+    print 'Sleep %s s' % date
     time.sleep(date)
 
 
@@ -42,49 +48,66 @@ def req(url):
 def save(file_path, file_name, data):
     if not os.path.exists(file_path):
         os.makedirs(file_path)
-    with codecs.open(file_path + "/" + file_name, "w+", encoding='utf8') as f:
+    with codecs.open(file_path + '/' + file_name, 'w', encoding='utf8') as f:
         f.write(data)
         f.flush()
 
 
-def parse_and_save_image(path, data):
-    urls = re.findall('url": "(.*?)"', data)
-    print "Found %s images" % len(urls)
+def parse_image_url(trip_days):
+    urls = []
+    for day in trip_days:
+        for node in day['nodes']:
+            for note in node['notes']:
+                photo = note.get('photo')
+                if photo is not None:
+                    urls.append(photo['url'])
+    print 'Found %s images' % len(urls)
+    return urls
+
+
+def save_images(path, urls):
     for url in urls:
         response = requests.get(url)
-        file_name = url[url.index("/", 22) + 1:]
-        with open(path + "/" + file_name, 'wb') as img:
+        file_name = url[url.rindex('/') + 1:]
+        with open(path + '/' + file_name, 'wb') as img:
             img.write(response.content)
             img.flush()
-            print "Download %s success" % file_name
+            print 'Download %s success' % file_name
 
 
-def save_chanyouji(user_id):
-    base_user_url = "http://chanyouji.com/api/users/%s.json?page=%s"
-    base_trip_url = "http://chanyouji.com/api/trips/%s.json"
+def save_trip(trip_id):
+    trip_url = base_trip_url % trip_id
+    data = req(trip_url)
+    user_id = str(data['user']['id'])
+    user_name = str(data['user']['name'])
+    trip_name = str(data['name'])
+    print 'Found (user id: %s, user name: %s, trip id: %s, trip name: %s)' % (user_id, user_name, trip_id, trip_name)
+    trip_path = base_trip_path % (user_id, trip_id)
+    trip_name = '%s.json' % trip_id
+    save(trip_path, trip_name, json.dumps(data, ensure_ascii=False))
+    sleep()
+    urls = parse_image_url(data['trip_days'])
+    save_images(trip_path, urls)
 
+
+def save_user(user_id):
     user_url = base_user_url % (user_id, 0)
     user_json = req(user_url)
 
-    cid = user_json["id"],
-    name = user_json["name"]
-    trips_count = user_json["trips_count"]
+    name = user_json['name']
+    trips_count = user_json['trips_count']
+    trips = user_json['trips']
 
-    print "User name %s, trips_count: %s" % (name, trips_count)
+    user_path = base_user_path % user_id
+    if os.path.exists(user_path):
+        shutil.rmtree(user_path)
 
-    for trip in user_json["trips"]:
-        print "Save trip %s" % str(trip["name"])
-        trip_id = str(trip["id"])
-        trip_url = base_trip_url % trip_id
-        save_path = "../data/user_%s/trip_%s" % (user_id, trip_id)
-        save_name = "%s.json" % trip_id
-        content = json.dumps(req(trip_url), ensure_ascii=False)
-        save(save_path, save_name, content)
-        sleep()
-        parse_and_save_image(save_path, content)
+    print 'User name: %s, trips count: %s' % (name, trips_count)
+    user_json['trips'] = None
+    save(user_path, '%s.json' % user_id, json.dumps(user_json, ensure_ascii=False))
 
-    user_json["trips"] = None
-    save("../data/user_%s" % user_id, "%s.json" % user_id, json.dumps(user_json, ensure_ascii=False))
+    for trip in trips:
+        save_trip(str(trip['id']))
 
     page_count = trips_count / 10
     if trips_count % 10 > 0:
@@ -93,18 +116,10 @@ def save_chanyouji(user_id):
     if page_count > 1:
         for count in range(2, page_count + 1, 1):
             user_url = base_user_url % (user_id, count)
-            trips = req(user_url)["trips"]
+            trips = req(user_url)['trips']
             for trip in trips:
-                print "save trip %s" % str(trip["name"])
-                trip_id = str(trip["id"])
-                trip_url = base_trip_url % trip_id
-                save_path = "../data/user_%s/trip_%s" % (user_id, trip_id)
-                save_name = "%s.json" % trip_id
-                content = json.dumps(req(trip_url), ensure_ascii=False)
-                save(save_path, save_name, content)
-                sleep()
-                parse_and_save_image(save_path, content)
+                save_trip(str(trip['id']))
 
 
 chanyouji_id = raw_input('Please enter your ChanYouJi Id: ')
-save_chanyouji(chanyouji_id)
+save_user(chanyouji_id)
