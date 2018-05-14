@@ -32,9 +32,7 @@ def req(url):
     try:
         response = requests.get(url, headers=headers, timeout=timeout)
         if response.status_code == 200:
-            data = response.json()
-            print('Request %s Success' % url)
-            return data
+            return response.json()
         else:
             print('HTTP CODE: %d %s' % (response.status_code, url))
     except Exception as e:
@@ -108,5 +106,5 @@ def save_chanyouji(user_id):
                 parse_and_save_image(save_path, content)
 
 
-chanyouji_id = 658973
+chanyouji_id = raw_input('Please enter your ChanYouJi Id: ')
 save_chanyouji(chanyouji_id)
