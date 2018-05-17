@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="csstransforms csstransforms3d csstransitions gr__chanyouji_com">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>{{ user.name }}的游记 - 蝉游记 - 发现旅行之美，保存旅行回忆</title>
+    <meta content="那些一生只见一次的美景你怎么舍得遗忘,10分钟写出漂亮游记" name="description">
+    <meta content="游记,旅游攻略,自助游" name="keywords">
+    <meta content="IE=Edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="webkit" name="renderer">
+    <link href="/static/favicon-28d3ebf155339de4149e853c89268c5e.ico" rel="shortcut icon">
+    <link href="/static/touch-icon-c76a8f4b30feb31dc695f9d7ecc9e47d.png" rel="apple-touch-icon-precomposed">
+    <link href="/static/touch-icon-72-80cc1d2402b32d2193cf7f660a788fe4.png" rel="apple-touch-icon-precomposed"
+          sizes="72x72">
+    <link href="/static/touch-icon-114-cb5717b20da55cb9b43d5e35b4eb6bca.png" rel="apple-touch-icon-precomposed"
+          sizes="114x114">
+    <link href="http://chanyouji.com/trips.rss" rel="alternate" title="蝉游记 - 精选游记 RSS" type="application/rss+xml">
+    <script type="text/javascript">if (self != top) top.location.href = self.location.href;</script>
+    <link href="/static/application-3507b4c9cc8ab60c6e3897ee732d64fa.css" media="all" rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+    <link href="/static/lt_ie9-bb0a21f3a12a4b9359b1944db9aa6686.css" media="screen" rel="stylesheet" type="text/css"/>
+    <![endif]--><!--[if lt IE 7]>
+    <link href="/static/ie6-2784a7ac07cf06630699dd2e58132186.css" media="screen" rel="stylesheet" type="text/css"/>
+    <![endif]--><!--[if lt IE 9]>
+    <script src="static/html5-17408d6adb7038f9d8c3f2f3b77ea7d6.js" type="text/javascript"></script>
+    <![endif]-->
+    <script type="text/javascript">var _G_current_user_cookie = "";</script>
+    <script src="/static/application-68213565115eb52d21cba4efc229c36d.js" type="text/javascript"></script>
+    <script charset="utf-8" src="chrome-extension://jgphnjokjhjlcnnajmfjlacjnjkhleah/js/btype.js"></script>
+    <link type="text/css" rel="stylesheet" href="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/content.css">
+</head>
+<body class="users-show" data-gr-c-s-loaded="true" style="">
+<div id="wrapper">
+    <div class="top-bar">
+        <a href="http://chanyouji.com/">
+            <img alt="蝉游记" class="top-logo" id="site-logo"
+                 src="/static/top-logo@2x-afb1f2d6648727386edf4cfdc6f55e6e.png">
+        </a>
+        <div class="top-search">
+            <form action="http://chanyouji.com/search/index" id="top-search-bar" method="get">
+                <input name="q" placeholder="搜索" type="text">
+                <button type="submit" hidefocus="true"></button>
+            </form>
+            <script type="text/javascript">topSearchBar()</script>
+        </div>
+        <ul class="menu">
+            <li><a href="http://chanyouji.com/home/app">手机应用</a></li>
+            <li><a href="http://chanyouji.com/home/app#inspiration">氢气球旅行</a></li>
+        </ul>
+        <script type="text/javascript">$("#top-bar-login a").fancybox({
+            scrolling: 'no',
+            padding: 0,
+            type: 'iframe',
+            width: 450,
+            height: 600
+        });
+        </script>
+    </div>
+    <div id="page-body">
+        <div class="users-page-header clearfix">
+            <a href="http://chanyouji.com/users/658973">
+                <img alt="" class="avatar" src="{{ user.image|switch_user_image(user.user_id) }}">
+            </a>
+            <div class="users-info"><h1>{{ user.name }}</h1>
+                <div>共 {{ user.trips_count }} 篇游记</div>
+            </div>
+        </div>
+        <div class="page-container">
+            <div class="trip-list-v2 no-user clearfix" id="my-trips">
+                {% for trip in user.trips %}
+                <article class="trip-list-item" data-id="{{ trip['id'] }}">
+                    <div class="inner">
+                        <div class="cover-image">
+                            <a href="/users/{{ user.user_id }}/trips/{{ trip['id'] }}">
+                                <img alt="288"
+                                     src="{{ trip['front_cover_photo_url'] | switch_user_image(user.user_id) }}">
+                                <div class="mask-b"></div>
+                            </a>
+                            <div class="view-info">
+                                <div class="ii v">{{ trip['views_count'] }}</div>
+                                <div class="ii c">{{ trip['comments_count'] }}</div>
+                                <div class="ii l">{{ trip['likes_count'] }}</div>
+                                <div class="ii s">0</div>
+                            </div>
+                        </div>
+                        <h1 class="name">{{ trip['name'] }}</h1>
+                        <p class="meta">{{ trip['start_date'] }} / {{ trip['days'] }}天 / {{ trip['photos_count'] }}图</p>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            <nav class="pagination"></nav>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $('#my-trips').tripManager();
+        $('#link-follow').on('ajax:success', function (e, response) {
+            $(this).html(response)
+        });
+        $('.g-pdf-a').fancybox({scrolling: 'no', padding: 0, type: 'iframe', width: 360, height: 370});
+        $('#pm').fancybox({scrolling: 'no', padding: 0, type: 'iframe', width: 342, height: 245});
+        $(function () {
+            $("a.node").click(function () {
+                var node_id = $(this).data("id");
+                var markers = Gmaps.map.markers;
+                for (var i = 0; i < markers.length; i++) {
+                    if (markers[i].id == node_id) {
+                        Gmaps.map.openInfoWindow(Gmaps.map, markers[i].infowindow, markers[i].serviceObject)();
+                        return false;
+                    }
+                }
+                return false;
+            });
+        });
+    </script>
+</div>
+<script type="text/javascript">
+    $("#footer-feedback").fancybox({
+        scrolling: 'no',
+        padding: 0,
+        width: 770,
+        height: 420,
+        type: 'iframe',
+        hideOnOverlayClick: false
+    });
+</script>
+<div id="fancybox-tmp"></div>
+<div id="fancybox-loading">
+    <div></div>
+</div>
+<div id="fancybox-overlay"></div>
+<div id="fancybox-wrap">
+    <div id="fancybox-outer">
+        <div class="fancybox-bg" id="fancybox-bg-n"></div>
+        <div class="fancybox-bg" id="fancybox-bg-ne"></div>
+        <div class="fancybox-bg" id="fancybox-bg-e"></div>
+        <div class="fancybox-bg" id="fancybox-bg-se"></div>
+        <div class="fancybox-bg" id="fancybox-bg-s"></div>
+        <div class="fancybox-bg" id="fancybox-bg-sw"></div>
+        <div class="fancybox-bg" id="fancybox-bg-w"></div>
+        <div class="fancybox-bg" id="fancybox-bg-nw"></div>
+        <div id="fancybox-content"></div>
+        <a id="fancybox-close"></a>
+        <div id="fancybox-title"></div>
+        <a href="javascript:;" id="fancybox-left">
+            <span class="fancy-ico" id="fancybox-left-ico"></span>
+        </a>
+        <a href="javascript:;" id="fancybox-right">
+            <span class="fancy-ico" id="fancybox-right-ico"></span>
+        </a>
+    </div>
+</div>
+<div class="g-preload"><i class="l1"></i><i class="l2"></i></div>
+</body>
+</html>

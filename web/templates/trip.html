@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html class="csstransforms csstransforms3d csstransitions gr__chanyouji_com"
+      style="width: 1440px; height: 686px; overflow: hidden;">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style type="text/css" title="audiojs">
+        .audiojs audio {
+            position: absolute;
+            left: -1px;
+        }
+
+        .audiojs {
+            width: 460px;
+            height: 36px;
+            background: #404040;
+            overflow: hidden;
+            font-family: monospace;
+            font-size: 12px;
+            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #444), color-stop(0.5, #555), color-stop(0.51, #444), color-stop(1, #444));
+            background-image: -moz-linear-gradient(center top, #444 0%, #555 50%, #444 51%, #444 100%);
+            -webkit-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+            -moz-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+            -o-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .audiojs .play-pause {
+            width: 25px;
+            height: 40px;
+            padding: 4px 6px;
+            margin: 0px;
+            float: left;
+            overflow: hidden;
+            border-right: 1px solid #000;
+        }
+
+        .audiojs p {
+            display: none;
+            width: 25px;
+            height: 40px;
+            margin: 0px;
+            cursor: pointer;
+        }
+
+        .audiojs .play {
+            display: block;
+        }
+
+        .audiojs .scrubber {
+            position: relative;
+            float: left;
+            width: 280px;
+            background: #5a5a5a;
+            height: 14px;
+            margin: 10px;
+            border-top: 1px solid #3f3f3f;
+            border-left: 0px;
+            border-bottom: 0px;
+            overflow: hidden;
+        }
+
+        .audiojs .progress {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            height: 14px;
+            width: 0px;
+            background: #ccc;
+            z-index: 1;
+            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ccc), color-stop(0.5, #ddd), color-stop(0.51, #ccc), color-stop(1, #ccc));
+            background-image: -moz-linear-gradient(center top, #ccc 0%, #ddd 50%, #ccc 51%, #ccc 100%);
+        }
+
+        .audiojs .loaded {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            height: 14px;
+            width: 0px;
+            background: #000;
+            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #222), color-stop(0.5, #333), color-stop(0.51, #222), color-stop(1, #222));
+            background-image: -moz-linear-gradient(center top, #222 0%, #333 50%, #222 51%, #222 100%);
+        }
+
+        .audiojs .time {
+            float: left;
+            height: 36px;
+            line-height: 36px;
+            margin: 0px 0px 0px 6px;
+            padding: 0px 6px 0px 12px;
+            border-left: 1px solid #000;
+            color: #ddd;
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+        }
+
+        .audiojs .time em {
+            padding: 0px 2px 0px 0px;
+            color: #f9f9f9;
+            font-style: normal;
+        }
+
+        .audiojs .time strong {
+            padding: 0px 0px 0px 2px;
+            font-weight: normal;
+        }
+
+        .audiojs .error-message {
+            float: left;
+            display: none;
+            margin: 0px 10px;
+            height: 36px;
+            width: 400px;
+            overflow: hidden;
+            line-height: 36px;
+            white-space: nowrap;
+            color: #fff;
+            text-overflow: ellipsis;
+            -o-text-overflow: ellipsis;
+            -icab-text-overflow: ellipsis;
+            -khtml-text-overflow: ellipsis;
+            -moz-text-overflow: ellipsis;
+            -webkit-text-overflow: ellipsis;
+        }
+
+        .audiojs .error-message a {
+            color: #eee;
+            text-decoration: none;
+            padding-bottom: 1px;
+            border-bottom: 1px solid #999;
+            white-space: wrap;
+        }
+
+        .audiojs .play {
+            background: url("/static/player-graphics-87bc2eca3137ee42171127c9c1b6e29f.gif") -2px -1px no-repeat;
+        }
+
+        .audiojs .loading {
+            background: url("/static/player-graphics-87bc2eca3137ee42171127c9c1b6e29f.gif") -2px -31px no-repeat;
+        }
+
+        .audiojs .error {
+            background: url("/static/player-graphics-87bc2eca3137ee42171127c9c1b6e29f.gif") -2px -61px no-repeat;
+        }
+
+        .audiojs .pause {
+            background: url("/static/player-graphics-87bc2eca3137ee42171127c9c1b6e29f.gif") -2px -91px no-repeat;
+        }
+
+        .playing .play, .playing .loading, .playing .error {
+            display: none;
+        }
+
+        .playing .pause {
+            display: block;
+        }
+
+        .loading .play, .loading .pause, .loading .error {
+            display: none;
+        }
+
+        .loading .loading {
+            display: block;
+        }
+
+        .error .time, .error .play, .error .pause, .error .scrubber, .error .loading {
+            display: none;
+        }
+
+        .error .error {
+            display: block;
+        }
+
+        .error .play-pause p {
+            cursor: auto;
+        }
+
+        .error .error-message {
+            display: block;
+        }
+    </style>
+    <title>{{ trip['name'] }}</title>
+    <meta content="IE=Edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="initial-scale=1,user-scalable=no,width=device-width" name="viewport">
+    <meta content="webkit" name="renderer">
+    <link href="/static/favicon-28d3ebf155339de4149e853c89268c5e.ico" rel="shortcut icon">
+    <link href="/static/touch-icon-c76a8f4b30feb31dc695f9d7ecc9e47d.png" rel="apple-touch-icon-precomposed">
+    <link href="/static/touch-icon-72-80cc1d2402b32d2193cf7f660a788fe4.png" rel="apple-touch-icon-precomposed"
+          sizes="72x72">
+    <link href="/static/assets/touch-icon-114-cb5717b20da55cb9b43d5e35b4eb6bca.png" rel="apple-touch-icon-precomposed"
+          sizes="114x114">
+    <script type="text/javascript">if (self != top) top.location.href = "http://chanyouji.com/?anti_iframe_source=" + top.location.href + "&anti_iframe_url=" + self.location.href;</script>
+    <link href="/static/application-3507b4c9cc8ab60c6e3897ee732d64fa.css" media="all"
+          rel="stylesheet" type="text/css">
+    <!--[if lt IE 9]>
+    <link href="/static/lt_ie9-bb0a21f3a12a4b9359b1944db9aa6686.css" media="screen" rel="stylesheet" type="text/css"/>
+    <![endif]--><!--[if lt IE 7]>
+    <link href="/static/ie6-2784a7ac07cf06630699dd2e58132186.css" media="screen" rel="stylesheet" type="text/css"/>
+    <![endif]--><!--[if lt IE 9]>
+    <script src="/static/html5-17408d6adb7038f9d8c3f2f3b77ea7d6.js" type="text/javascript"></script><![endif]-->
+    <script type="text/javascript">var _G_current_user_cookie = "";</script>
+    <script src="/static/application-68213565115eb52d21cba4efc229c36d.js" type="text/javascript"></script>
+    <script charset="utf-8" src="chrome-extension://jgphnjokjhjlcnnajmfjlacjnjkhleah/js/btype.js"></script>
+    <link type="text/css" rel="stylesheet" href="chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/content.css">
+</head>
+<body class="empty-layout" id="trips-show" data-gr-c-s-loaded="true"
+      style="width: 1440px; height: 686px; overflow: hidden;">
+<div class="trips-wrapper trips-wrapper-visible" id="js-trip">
+    <div class="logo"><a href="http://chanyouji.com/">蝉游记</a></div>
+    <div class="trip-show-cover" id="cover">
+        <div class="cover-header" id="cover-header"><h1 style="font-size:40px"><span class="inner-text">{{ trip['name'] }}</span>
+        </h1>
+            <div class="meta clearfix">
+                <div class="trip-info">
+                    <time>{{ trip['start_date'] }} [{{ trip['trip_days']|length }}天]</time>
+                    <div class="user">By <a href="/users/{{ user_id }}">{{ trip['user']['name'] }}</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cover-photo" id="cover-photo">
+        <!--<div class="load-ico" style="display: none;"><i></i></div>-->
+        <img alt="" class="img" data-custom="false" id="cover-img" unselectable="on"
+             src="{{ trip['front_cover_photo_url']|switch_trip_image(user_id,  trip_id) }}"
+             style="top: -301px; left: 0px; height: 1440px; width: 1440px;">
+    </div>
+    <article class="viewer" id="viewer" style="left: 100%;">
+        <a class="more-travels" href="/users/{{ user_id }}">
+            <span class="username">@{{ trip['user']['name'] }}</span>
+        </a>
+        <div class="trip-title" id="back-cover">
+            <div class="inner clearfix"><h1><span class="inner-text">{{ trip['name'] }}</span></h1></div>
+        </div>
+
+        <div class="nav-board" id="nav-board" style="top: 55px;">
+            <div class="c">
+                <span class="inner-text"></span>
+                <a class="anchor" target="_blank" style="display: inline-block;"><i></i></a>
+            </div>
+        </div>
+        <div class="viewport-wrapper" style="height: 536px; top: 100px;">
+            <div class="viewport" id="viewport" style="height: 536px;">
+                <div class="slider" id="slider" style="width: 33531px;">
+
+                    {% with %}
+                    {% for day in trip.trip_days %}
+                    {% set i = loop.index0 %}
+                    <div class="note day" data-day="{{ day['day'] }}" data-group="{{ i }}" data-layout="full"
+                         data-type="day"
+                         id="d-{{ day['id'] }}"
+                         style="width: 379px; height: 536px; left: 1px;">
+                        <div class="note-content" style="width: 309px; height: 466px;">
+                            <div class="day-content no-weather">
+                                <div class="ico-calendar"></div>
+                                <div class="day-index">第{{ day['day'] }}天</div>
+                                <div class="day-date">{{ day['trip_date'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% for node in day.nodes[1:] %}
+                    {% set j = loop.index %}
+                    <div class="note node" data-group="{{ i }}-{{ j }}" data-layout="full" data-type="node"
+                         id="nd-{{ node['id'] }}"
+                         style="width: 379px; height: 536px; left: 381px;">
+                        <div class="note-content" style="width: 309px; height: 466px;">
+                            <div class="node-content" style="height: 354px; margin-top: 56px;">
+                                <div class="ico ico-sight"></div>
+                                <div class="node-name">{{ node['entry_name'] }}</div>
+                                <div class="node-name-en"></div>
+                                <div class="node-info">
+
+                                    {% if node['memo'].get('price_amount') and node['memo'].get('time') %}
+                                    <div class="memo">
+                                        <span class="memo-inner">
+                                            <span>门票{{ node['memo']['price_amount'] }}{{ node['memo']['price_currency']|price_currency }}</span>
+                                            <span class="space">|</span>
+                                            <span>游览{{ node['memo']['time'] }}{{ node['memo']['time_unit']|time_unit }}</span>
+                                        </span>
+                                    </div>
+                                    {% elif node['memo'].get('price_amount') and not node['memo'].get('time') %}
+                                    <div class="memo">
+                                        <span class="memo-inner">
+                                            <span>门票{{ node['memo']['price_amount'] }}{{ node['memo']['price_currency']|price_currency }}</span>
+                                        </span>
+                                    </div>
+                                    {% elif not node['memo'].get('price_amount') and node['memo'].get('time') %}
+                                    <div class="memo">
+                                        <span class="memo-inner">
+                                            <span>游览{{ node['memo']['time'] }}{{ node['memo']['time_unit']|time_unit }}</span>
+                                        </span>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if node.get('score') %}
+                                    <div class="single-row">
+                                        <span class="attr">我的评价：</span>
+                                        <span class="val">
+                                            <span class="star-score">
+                                                <i class="star-score-{{ node['score'] }}"></i>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    {% endif %}
+
+                                    {% if node.get('comment') %}
+                                    <div class="desc">{{ node['comment'] }}</div>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% for note in node.notes %}
+                    {% set k = loop.index0 %}
+
+
+                    {% if note.get('photo') %}
+
+                    {% if note['layout'] == 'full' %}
+                    <div class="note photo photo-full" data-group="{{ i }}-{{ j }}-{{ k }}"
+                         data-layout="{{ note['layout'] }}" data-type="photo"
+                         id="nt-{{ note['id'] }}" style="width: 715px; height: 536px; left: 761px;">
+                        {% else %}
+                        <div class="note photo" data-group="{{ i }}-{{ j }}-{{ k }}"
+                             data-layout="{{ note['layout'] }}" data-type="photo"
+                             id="nt-{{ note['id'] }}" style="width: 715px; height: 536px; left: 761px;">
+                            {% endif %}
+
+                            <div class="note-content" style="width: 695px; height: 492px;">
+                                <figure style="width: 695px; height: 492px;">
+                                    <img class="photo" style="top: -12px; left: 0px; height: 522px; width: 695px;"
+                                         src="{{ note['photo']['url'] | switch_trip_image(user_id, trip_id ) }}">
+                                    {% if note.get('description') %}
+                                    <figcaption class="caption"><p>{{ note['description'] }}</p></figcaption>
+                                    {% endif %}
+                                </figure>
+                            </div>
+                            <div class="note-footer">
+                                <!-- TODO -->
+                                <time datetime="{{ note['photo']['exif_date_time_original']|date_format('%HH:%mm') }}"
+                                      class="has-clock">08:00
+                                    <canvas width="20" height="20"></canvas>
+                                </time>
+                                <div class="action"><span class="like"><i class="ico"></i><span>0</span></span></div>
+                            </div>
+                        </div>
+                        {% elif note.get('audio') %}
+                        <!-- TODO  audio -->
+                        {% else %}
+                        <div class="note text text-full" data-group="{{ i }}-{{ j }}-{{ k }}"
+                             data-layout="{{ note['layout'] }}" data-type="text"
+                             id="nt-{{ note['id'] }}" style="width: 379px; height: 536px; left: 3494px;">
+                            <div class="note-content" style="width: 354px; height: 466px;">
+                                <div class="text-wrapper" style="overflow: hidden;">
+                                    <div class="text-quot-r scroller clearfix" style="position: relative; top: 0px;">
+                                        <div class="text-content"
+                                             style="font-size: 16px; margin-top: 101.5px; margin-left: 13.5px;">
+                                            <p>{{ note['description'] }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="scrollbar scrollbar-v" unselectable="on"
+                                         style="display: none; height: 466px;">
+                                        <div class="track" unselectable="on"></div>
+                                        <div class="thumb" unselectable="on" style="height: 466px;"></div>
+                                    </div>
+                                    <div class="scrollbar scrollbar-v" unselectable="on"
+                                         style="display: none; height: 466px;">
+                                        <div class="track" unselectable="on"></div>
+                                        <div class="thumb" unselectable="on" style="height: 466px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="note-footer no-date">
+                                <div class="action"><span class="like"><i class="ico"></i><span>0</span></span></div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% endfor %}
+
+                        {% endfor %}
+
+                        {% endfor %}
+
+                        {% endwith %}
+
+                        {% if trip.get('tip') %}
+                        <div class="note trip-tips note-hover" data-group="-2-0-0" data-layout="full" data-type="tips"
+                             id="trip-tips" style="width: 380px; height: 537px; left: 17444px;">
+                            <div class="note-content" style="width: 380px; height: 467px;">
+                                <div class="tips-content" style="margin-top: 143px;">
+                                    <div class="tips-header">
+                                        <div class="ico"></div>
+                                        <div class="title">旅行小贴士</div>
+                                    </div>
+                                    <div class="tip-items-wrapper"
+                                         style="overflow: hidden; position: relative; height: auto;">
+                                        <ul class="tip-items scroller" style="position: relative; top: 0px;">
+
+                                            {% for text in trip['tip']['texts'] %}
+                                            <li>{{ text }}</li>
+                                            {% endfor %}
+
+                                        </ul>
+                                        <div class="scrollbar scrollbar-v" unselectable="on"
+                                             style="display: none; height: 83px;">
+                                            <div class="track" unselectable="on"></div>
+                                            <div class="thumb" unselectable="on" style="top: 11px; height: 94px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="note note-theend" data-group="-1-0-0" data-layout="full" data-type="theend"
+                             id="theend" style="width: 380px; height: 537px; left: 17825px;">
+                            <div class="note-content" style="width: 310px; height: 467px;">
+                                <div class="poweredbyapp"></div>
+                            </div>
+                        </div>
+
+                        <div class="spacer" id="dragdrop-spacer"></div>
+                        <div class="spacer-hor" id="dragdrop-spacer-hor"></div>
+                    </div>
+                    <div class="shadow-h-t"></div>
+                    <div class="shadow-h-b"></div>
+                </div>
+                <div class="ie-fix"></div>
+    </article>
+
+    {% with %}
+    {% set script_path = 'data/user_%s/trip_%s/script.js' % (user_id, trip_id) %}
+    <script src="{{ url_for('static', filename=script_path) }}"></script>
+    {% endwith %}
+
+</div>
+<div id="comments-mini" style="">
+    <div class="h"><h3>评论</h3><a class="close" href="http://chanyouji.com/trips/702036#"></a></div>
+    <div class="list-wrapper" style="overflow: hidden;">
+        <div class="list scroller loading" style="top: 0px;"></div>
+        <div class="scrollbar scrollbar-v" unselectable="on" style="display: none; height: 0px;">
+            <div class="track" unselectable="on"></div>
+            <div class="thumb" unselectable="on"></div>
+        </div>
+        <div class="scrollbar scrollbar-v" unselectable="on" style="display: none; height: 0px;">
+            <div class="track" unselectable="on"></div>
+            <div class="thumb" unselectable="on"></div>
+        </div>
+    </div>
+</div>
+<div class="full-viewer-overlay" id="full-viewer-overlay"></div>
+<div class="full-viewer" id="full-viewer">
+    <div class="close" title="关闭"></div>
+    <div class="left"></div>
+    <div class="right"></div>
+</div>
+<script id="_tpl_full_note_text" type="text/template">
+    <div class="full-note">
+        <div class="note-content">
+            <div class="note-text-wrapper csb clearfix">
+                <div class="note-text scroller"></div>
+            </div>
+            <div class="note-footer">
+                <div class="note-footer-inner">
+                    <time></time>
+                    <div class="action"><span class="like"><i class="ico"></i><span></span></span></div>
+                </div>
+            </div>
+        </div>
+    </div></script>
+<script id="_tpl_full_note_day" type="text/template">
+    <div class="day full-note">
+        <div class="note-content">
+            <div class="day-content">
+                <div class="ico-calendar"></div>
+                <div class="day-index"></div>
+                <div class="day-date"></div>
+                <div class="day-week"></div>
+            </div>
+        </div>
+    </div></script>
+<script id="_tpl_full_theend" type="text/template">
+    <div class="full-note note-theend">
+        <div class="note-content">
+            <div class="poweredby">
+                <div class="pb-img"></div>
+            </div>
+        </div>
+    </div></script>
+<script id="_tpl_full_tips" type="text/template">
+    <div class="full-note trip-tips">
+        <div class="tips-content">
+            <div class="tips-header">
+                <div class="ico"></div>
+                <div class="title">旅行小贴士</div>
+            </div>
+            <div class="tip-items-wrapper csb">
+                <ul class="tip-items scroller"></ul>
+            </div>
+        </div>
+    </div></script>
+<script id="_tpl_full_note_photo" type="text/template">
+    <div class="full-note">
+        <div class="note-content"><img class="photo"/>
+            <div class="desc"><p></p></div>
+            <div class="note-footer">
+                <div class="exif-info loading">
+                    <ul>
+                        <li class="loading">exif信息读取中...</li>
+                    </ul>
+                </div>
+                <div class="note-footer-inner">
+                    <time></time>
+                    <div class="exif"></div>
+                    <div class="share-photo">
+                        <a class="weibo" target="_blank" title="分享到新浪微博"></a>
+                        <a class="qzone" target="_blank" title="分享到QQ空间"></a>
+                        <a class="douban" target="_blank" title="分享到豆瓣"></a>
+                    </div>
+                    <div class="action"><span class="like"><i class="ico"></i><span></span></span></div>
+                </div>
+            </div>
+        </div>
+    </div></script>
+<script id="_tpl_full_note_video" type="text/template">
+    <div class="full-note">
+        <div class="note-content">
+            <div class="flowplayer">
+                <video></video>
+            </div>
+            <div class="desc"><p></p><i class="slide-down"></i></div>
+            <div class="note-footer">
+                <div class="note-footer-inner">
+                    <time></time>
+                    <div class="action"><span class="like"><i class="ico"></i><span></span></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="_tpl_full_node" type="text/template">
+    <div class="node full-note">
+        <div class="note-content">
+            <div class="node-content">
+                <div class="ico"></div>
+                <div class="node-name"></div>
+                <div class="node-name-en"></div>
+                <div class="node-info"></div>
+            </div>
+        </div>
+    </div></script>
+<div id="hider" style="position:absolute;left:-9999px;top:-9999px;"></div>
+<div id="audio-player-c" style="position:absolute;top:-999px;left:-999px;">
+    <div class="audiojs loading" classname="audiojs" id="audiojs_wrapper0">
+        <div class="audiojs loading" classname="audiojs" id="audiojs_wrapper0">
+            <audio id="audio-player" preload="auto"></audio>
+            <div class="play-pause"><p class="play"></p>
+                <p class="pause"></p>
+                <p class="loading"></p>
+                <p class="error"></p></div>
+            <div class="scrubber">
+                <div class="progress"></div>
+                <div class="loaded"></div>
+            </div>
+            <div class="time"><em class="played">00:00</em>/<strong class="duration">00:00</strong></div>
+            <div class="error-message"></div>
+        </div>
+        <div class="play-pause"><p class="play"></p>
+            <p class="pause"></p>
+            <p class="loading"></p>
+            <p class="error"></p></div>
+        <div class="scrubber">
+            <div class="progress"></div>
+            <div class="loaded"></div>
+        </div>
+        <div class="time"><em class="played">00:00</em>/<strong class="duration">00:00</strong></div>
+        <div class="error-message"></div>
+    </div>
+</div>
+<script>
+    _G_trip_front_cover_photo = "{{ trip['front_cover_photo_url']|switch_trip_image(user_id,  trip_id) }}";
+    _G_trip_current_user_likes = [];
+    _G_trip_current_user_comments = [];
+    tripShowInit();
+</script>
+<div id="fancybox-tmp"></div>
+<div id="fancybox-loading">
+    <div></div>
+</div>
+<div id="fancybox-overlay"></div>
+<div id="fancybox-wrap">
+    <div id="fancybox-outer">
+        <div class="fancybox-bg" id="fancybox-bg-n"></div>
+        <div class="fancybox-bg" id="fancybox-bg-ne"></div>
+        <div class="fancybox-bg" id="fancybox-bg-e"></div>
+        <div class="fancybox-bg" id="fancybox-bg-se"></div>
+        <div class="fancybox-bg" id="fancybox-bg-s"></div>
+        <div class="fancybox-bg" id="fancybox-bg-sw"></div>
+        <div class="fancybox-bg" id="fancybox-bg-w"></div>
+        <div class="fancybox-bg" id="fancybox-bg-nw"></div>
+        <div id="fancybox-content"></div>
+        <a id="fancybox-close"></a>
+        <div id="fancybox-title"></div>
+        <a href="javascript:;" id="fancybox-left"><span class="fancy-ico" id="fancybox-left-ico"></span></a>
+        <a href="javascript:;" id="fancybox-right"><span class="fancy-ico" id="fancybox-right-ico"></span></a>
+    </div>
+</div>
+<div class="g-preload"><i class="l1"></i><i class="l2"></i></div>
+<div class="g-preload"><i class="l1"></i><i class="l2"></i></div>
+</body>
+</html>

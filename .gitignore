@@ -109,3 +109,4 @@ venv.bak/
 
 # Data
 data/
+/web/static/data/
