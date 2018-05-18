@@ -1,6 +1,5 @@
 
 # Taki
-离线蝉游记中的回忆 
 
 [![Packagist](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/benjyair/Taki/blob/master/LICENSE)
 [![](https://img.shields.io/badge/language-Python-green.svg)](https://github.com/benjyair/Taki)
