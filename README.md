@@ -33,7 +33,7 @@ pip install -r requirements.txt
 
 ### 使用:
 
-* 爬虫使用
+* 爬虫的使用
 ```shell
 # 启动爬虫
 python spyder/main.py
@@ -41,7 +41,7 @@ python spyder/main.py
 ```
 
 
-* 服务器使用
+* 服务器的使用
 ```shell
 # 加载爬下来的数据
 cp -r spyder/data/ web/static/data/
