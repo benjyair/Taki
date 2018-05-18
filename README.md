@@ -1,8 +1,8 @@
-
 # Taki
 
 [![Packagist](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/benjyair/Taki/blob/master/LICENSE)
 [![](https://img.shields.io/badge/language-Python-green.svg)](https://github.com/benjyair/Taki)
+
 
 ### 下载源码:
 
@@ -11,6 +11,7 @@ git clone git@github.com:benjyair/Taki.git
 
 git clone https://github.com/benjyair/Taki.git
 ```
+
 
 ### 目录结构:
 
@@ -22,10 +23,12 @@ git clone https://github.com/benjyair/Taki.git
 * data 
 数据目录，执行爬虫脚本后保存爬取到的各种信息。
 
+
 ### 安装依赖:
 ```shell
 pip install -r requirements.txt
 ```
+
 
 ### 使用:
 
@@ -35,7 +38,7 @@ pip install -r requirements.txt
 python spyder/main.py
 # 接下来输入爬取用户的 ChanYouJi Id
 ```
-　　
+
 
 * 服务器使用
 ```shell
@@ -46,9 +49,10 @@ python web/application.py
 # 访问http://127.0.0.1:5000/users/<替换ChanYouJi Id> 
 ```
 
-### 问题反馈
-任何问题欢迎在[Issues](https://github.com/benjyair/Taki/issues) 中反馈。
 
-　　
+### 问题反馈
+任何问题欢迎在 [Issues](https://github.com/benjyair/Taki/issues) 中反馈。
+
+
 ### 项目由来
 银叔的蝉游记从入坑以来一直非常喜欢，画卷一样的布局、旅行中美好的回忆以及满世界打卡的功能深深吸引着我。但从蝉游记易手之后，项目能否继续活下去一直都存在疑问，2017 底年蝉游记服务器出现过多次 404 和 500，由此萌生了离线蝉游记数据的这个想法。项目名 Taki 取自新海诚《你的名字》中男主角的名字，希望借电影寓意来保存自己在蝉游记的一些回忆。
