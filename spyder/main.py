@@ -15,6 +15,7 @@ sys.setdefaultencoding('utf8')
 
 chanyouji_url = 'http://chanyouji.com'
 base_user_url = 'http://chanyouji.com/api/users/%s.json?page=%s'
+base_map_url = 'http://chanyouji.com/api/users/map/%s.json'
 base_trip_url = 'http://chanyouji.com/api/trips/%s.json'
 base_trip_script_url = 'http://chanyouji.com/trips/%s'
 
@@ -149,6 +150,9 @@ def save_user(user_id):
     user_json['trips'] = trips
     # save user json to user path
     save(user_path, '%s.json' % user_id, json.dumps(user_json, ensure_ascii=False))
+    # save user map to user path
+    map_url = base_map_url % user_id
+    save(user_path, 'map.json', json.dumps(req(map_url).json(), ensure_ascii=False))
     # save user image to user path
     save_images(user_path, {image})
     # save trips
@@ -157,5 +161,5 @@ def save_user(user_id):
             save_trip(str(trip['id']))
 
 
-chanyouji_id = raw_input('Please enter your ChanYouJi Id: ')
-save_user(chanyouji_id)
+if __name__ == '__main__':
+    save_user(raw_input('Please enter your ChanYouJi Id: '))
