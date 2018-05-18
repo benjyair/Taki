@@ -2,7 +2,7 @@
 <html lang="zh-CN" class="csstransforms csstransforms3d csstransitions gr__chanyouji_com">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>{{ user.name }}的游记 - 蝉游记 - 发现旅行之美，保存旅行回忆</title>
+    <title>{{ user['name'] }}的游记 - 蝉游记 - 发现旅行之美，保存旅行回忆</title>
     <meta content="那些一生只见一次的美景你怎么舍得遗忘,10分钟写出漂亮游记" name="description">
     <meta content="游记,旅游攻略,自助游" name="keywords">
     <meta content="IE=Edge,chrome=1" http-equiv="X-UA-Compatible">
@@ -57,22 +57,22 @@
     </div>
     <div id="page-body">
         <div class="users-page-header clearfix">
-            <a href="http://chanyouji.com/users/658973">
-                <img alt="" class="avatar" src="{{ user.image|switch_user_image(user.user_id) }}">
+            <a href="/users/{{ user['id'] }}">
+                <img alt="" class="avatar" src="{{ user['image']|switch_user_image(user['id']) }}">
             </a>
-            <div class="users-info"><h1>{{ user.name }}</h1>
-                <div>共 {{ user.trips_count }} 篇游记</div>
+            <div class="users-info"><h1>{{ user['name'] }}</h1>
+                <div>共 {{ user['trips']|length }} 篇游记</div>
             </div>
         </div>
         <div class="page-container">
             <div class="trip-list-v2 no-user clearfix" id="my-trips">
-                {% for trip in user.trips %}
+                {% for trip in user['trips'] %}
                 <article class="trip-list-item" data-id="{{ trip['id'] }}">
                     <div class="inner">
                         <div class="cover-image">
-                            <a href="/users/{{ user.user_id }}/trips/{{ trip['id'] }}">
+                            <a href="/users/{{ user['id'] }}/trips/{{ trip['id'] }}">
                                 <img alt="288"
-                                     src="{{ trip['front_cover_photo_url'] | switch_user_image(user.user_id) }}">
+                                     src="{{ trip['front_cover_photo_url'] | switch_user_image(user['id']) }}">
                                 <div class="mask-b"></div>
                             </a>
                             <div class="view-info">

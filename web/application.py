@@ -5,26 +5,13 @@ import time
 
 app = Flask(__name__)
 
-__base_user_path = '../data/user_%s'
-__base_trip_path = '../data/user_%s/trip_%s'
-
-
-class User(object):
-
-    def __init__(self, user_id, name, image, trips):
-        self.user_id = user_id
-        self.name = name
-        self.image = image
-        self.trips = trips
-        self.trips_count = len(trips)
-
-    def get_trips(self):
-        return self.trips
+__base_user_path = 'static/data/user_%s'
+__base_trip_path = 'static/data/user_%s/trip_%s'
 
 
 def load_user(user_id):
     user_path = __base_user_path % user_id
-    user_file = "%s.json" % user_id
+    user_file = '%s.json' % user_id
     try:
         with open(user_path + '/' + user_file, 'r') as f:
             data = f.read()
@@ -32,15 +19,16 @@ def load_user(user_id):
                 return None
             user = json.loads(data)
             # print 'Load user %s' % user
-            trips = [trip for trip in user['trips'] if trip['privacy'] is False]
-            return User(str(user['id']), str(user['name']), str(user['image']), trips)
+            user['trips'] = [trip for trip in user['trips'] if trip['privacy'] is False]
+            return user
     except IOError, e:
+        print e
         return None
 
 
 def load_trip(user_id, trip_id):
     trip_path = __base_trip_path % (user_id, trip_id)
-    trip_file = "%s.json" % trip_id
+    trip_file = '%s.json' % trip_id
     try:
         with open(trip_path + '/' + trip_file, 'r') as f:
             data = f.read()
@@ -50,6 +38,7 @@ def load_trip(user_id, trip_id):
             # print 'Load trip %s' % trip
             return trip
     except IOError, e:
+        print e
         return None
 
 
@@ -63,6 +52,7 @@ def load_trip_script(user_id, trip_id):
             # print 'Load trip script %s' % data
             return str(data)
     except IOError, e:
+        print e
         return None
 
 
