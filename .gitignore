@@ -108,5 +108,5 @@ venv.bak/
 *.iml
 
 # Data
-data/
-/web/static/data/
+spyder/data/
+web/static/data/

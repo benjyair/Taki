@@ -2,11 +2,13 @@
 from flask import Flask, render_template
 import json
 import time
+import os
 
 app = Flask(__name__)
 
-__base_user_path = 'static/data/user_%s'
-__base_trip_path = 'static/data/user_%s/trip_%s'
+root_path = os.path.split(os.path.realpath(__file__))[0]
+__base_user_path = root_path + '/static/data/user_%s'
+__base_trip_path = root_path + '/static/data/user_%s/trip_%s'
 
 
 def load_user(user_id):

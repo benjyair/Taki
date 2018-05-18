@@ -19,8 +19,9 @@ base_map_url = 'http://chanyouji.com/api/users/map/%s.json'
 base_trip_url = 'http://chanyouji.com/api/trips/%s.json'
 base_trip_script_url = 'http://chanyouji.com/trips/%s'
 
-base_user_path = '../data/user_%s'
-base_trip_path = '../data/user_%s/trip_%s'
+root_path = os.path.split(os.path.realpath(__file__))[0]
+base_user_path = root_path + '/data/user_%s'
+base_trip_path = root_path + '/data/user_%s/trip_%s'
 
 
 def sleep(leave=20):
