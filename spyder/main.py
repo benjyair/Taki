@@ -51,7 +51,7 @@ def load_cookies():
 
 def req(url):
     try:
-        response = requests.get(url, headers=headers, cookies=cookies)
+        response = requests.get(url, headers=headers, cookies=cookies, timeout=5000)
         if response.status_code == 200:
             return response
         else:
