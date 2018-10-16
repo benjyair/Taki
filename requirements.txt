@@ -3,6 +3,7 @@ certifi==2018.4.16
 chardet==3.0.4
 click==6.7
 Flask==1.0.2
+gunicorn==19.9.0
 idna==2.6
 itsdangerous==0.24
 Jinja2==2.10
@@ -12,4 +13,3 @@ requests==2.18.4
 urllib3==1.22
 web.py==0.39
 Werkzeug==0.14.1
-gunicorn==19.6.0
