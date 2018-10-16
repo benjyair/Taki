@@ -12,3 +12,4 @@ requests==2.18.4
 urllib3==1.22
 web.py==0.39
 Werkzeug==0.14.1
+gunicorn==19.6.0
