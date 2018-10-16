@@ -58,6 +58,11 @@ def load_trip_script(user_id, trip_id):
         return None
 
 
+@app.route('/')
+def home():
+    return user_index(6)
+
+
 @app.route('/users/<int:user_id>')
 def user_index(user_id):
     user = load_user(user_id)
