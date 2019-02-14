@@ -2,7 +2,7 @@
 
 [![Packagist](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/benjyair/Taki/blob/master/LICENSE)
 [![](https://img.shields.io/badge/language-Python-green.svg)](https://github.com/benjyair/Taki)
-
+**警告：随着蝉游记逐步关闭服务器，该项目爬虫部分已经失效，已经爬下来的数据可以正常使用**
 
 ### 下载源码:
 
